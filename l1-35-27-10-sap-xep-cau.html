@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sắp xếp câu – Giao tiếp L1 35 · 27.10</title>
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1f2328; --muted:#6b7078; --line:#e3dfd6;
+  --accent:#1f5f99; --accent-soft:#e6eef7; --chip:#fff; --chip-line:#cfd6df;
+  --ok:#1d7a46; --ok-soft:#e3f3ea; --bad:#b3261e; --bad-soft:#fbe7e5; --hint:#8a5a00; --hint-soft:#fff3d6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16181c; --card:#1f2228; --ink:#e8e9eb; --muted:#9aa0a8; --line:#2f333a;
+    --accent:#7fb2e6; --accent-soft:#22303f; --chip:#262a31; --chip-line:#3a404a;
+    --ok:#6cc893; --ok-soft:#1d3127; --bad:#f08a82; --bad-soft:#3a2222; --hint:#e8c06a; --hint-soft:#3a3120;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+header h1{font-size:1.35rem;margin:0 0 2px}
+header p{margin:0;color:var(--muted);font-size:.92rem}
+.bar{display:flex;align-items:center;gap:12px;margin:18px 0 10px;flex-wrap:wrap}
+.progress{flex:1;min-width:160px;height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.score{font-weight:600;font-size:.95rem;white-space:nowrap}
+select{font:inherit;font-size:.9rem;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 16px}
+.dot{width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--muted);font-size:.8rem;cursor:pointer;padding:0}
+.dot.cur{border-color:var(--accent);color:var(--accent);font-weight:700}
+.dot.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.dot.shown{background:var(--hint-soft);border-color:var(--hint);color:var(--hint)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px}
+.tag{display:inline-block;font-size:.78rem;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:99px}
+.form{font-size:.85rem;color:var(--muted);font-style:italic;margin-top:6px}
+.vi{font-size:1.15rem;font-weight:600;margin:14px 0 16px}
+.num{color:var(--muted);font-weight:500;margin-right:4px}
+.answer{min-height:58px;border:2px dashed var(--chip-line);border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;transition:border-color .2s,background .2s}
+.answer.ok{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}
+.answer.bad{border-style:solid;border-color:var(--bad);background:var(--bad-soft)}
+.answer .ph{color:var(--muted);font-size:.9rem;padding:0 6px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;min-height:44px}
+.chip{font:inherit;font-size:1rem;padding:7px 12px;border-radius:10px;border:1px solid var(--chip-line);background:var(--chip);color:var(--ink);cursor:pointer;box-shadow:0 1px 0 var(--chip-line);user-select:none}
+.chip:hover{border-color:var(--accent)}
+.chip.used{visibility:hidden}
+.answer .chip{background:var(--accent-soft);border-color:transparent}
+.answer .chip.fixed{background:var(--hint-soft);color:var(--hint);cursor:default}
+.answer .chip.wrong{background:var(--bad-soft);color:var(--bad)}
+.punct{font-size:1.2rem;font-weight:700;color:var(--muted)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+button.b{font:inherit;font-size:.92rem;padding:8px 14px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.b.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) button.b.pri{color:#10151b}}
+button.b:disabled{opacity:.45;cursor:default}
+.msg{margin-top:14px;font-size:.95rem;min-height:1.4em}
+.msg.ok{color:var(--ok);font-weight:600}
+.msg.bad{color:var(--bad)}
+.msg.show{color:var(--hint)}
+.nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
+.done{display:none;text-align:center;padding:28px 18px}
+.done h2{margin:0 0 6px}
+@media (max-width:480px){.vi{font-size:1.05rem}.chip{font-size:.95rem;padding:6px 10px}}
+.say{display:inline-flex;gap:6px;margin-left:8px;vertical-align:middle}
+.say button{font:inherit;font-size:.85rem;padding:3px 10px;border-radius:99px;border:1px solid var(--ok);background:var(--card);color:var(--ok);cursor:pointer}
+.msg.show .say button{border-color:var(--hint);color:var(--hint)}
+.say button:hover{background:var(--ok-soft)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Sắp xếp từ thành câu hoàn chỉnh</h1>
+    <p>Giao tiếp L1 35 · Ôn bài 27.10 · Tên tiếng Anh, số đếm, chuyển chỗ ngồi ở công ty</p>
+  </header>
+
+  <div class="bar">
+    <div class="progress"><i id="pbar"></i></div>
+    <div class="score" id="score">0 / 45</div>
+    <select id="filter" aria-label="Chọn cấu trúc"></select>
+  </div>
+  <div class="dots" id="dots"></div>
+
+  <div class="card" id="card">
+    <span class="tag" id="tag"></span>
+    <div class="form" id="form"></div>
+    <div class="vi"><span class="num" id="num"></span><span id="vi"></span></div>
+    <div class="answer" id="answer"></div>
+    <div class="bank" id="bank"></div>
+    <div class="btns">
+      <button class="b pri" id="check">Kiểm tra</button>
+      <button class="b" id="hint">Gợi ý 1 từ</button>
+      <button class="b" id="reset">Làm lại</button>
+      <button class="b" id="show">Xem đáp án</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <div class="nav">
+      <button class="b" id="prev">← Câu trước</button>
+      <button class="b" id="next">Câu sau →</button>
+    </div>
+  </div>
+
+  <div class="card done" id="done">
+    <h2>Hoàn thành! 🎉</h2>
+    <p id="doneText"></p>
+    <button class="b pri" id="restart">Làm lại từ đầu</button>
+  </div>
+</div>
+
+<script>
+const S=[["Hỏi cách có được cái gì", "How did you get + N?", [["Bạn có cái tên tiếng Anh này bằng cách nào?", "How did you get your English name?"], ["Bạn có được công việc này bằng cách nào?", "How did you get this job?"], ["Cô ấy có cái tên đó bằng cách nào?", "How did she get that name?"]]], ["Tự làm việc gì", "S + V + myself / yourself / herself", [["Tôi tự chọn nó.", "I chose it myself."], ["Bạn tự chọn cái tên này à?", "Did you choose this name yourself?"], ["Cô ấy tự làm cái bánh này.", "She made this cake herself."]]], ["Ai đó cho / đặt cho mình cái gì", "give + somebody + something · give + something + to somebody", [["Có người đặt cho tôi cái tên này.", "Someone gave me this name."], ["Bố mẹ tôi đặt cái tên đó cho tôi.", "My parents gave it to me."], ["Cô giáo đưa cho tôi quyển sách này.", "My teacher gave me this book."]]], ["Nói lý do", "The reason I + V2 … is that + S + V", [["Lý do tôi chọn tên này là vì tôi thích bộ phim đó.", "The reason I chose this name is that I like the movie."], ["Lý do tôi chọn tên này là vì nó ngắn.", "The reason I chose this name is that it is short."], ["Lý do tôi học tiếng Anh là vì tôi muốn đi du lịch.", "The reason I learn English is that I want to travel."]]], ["Người mà …", "S + is + a/the + N + who + V(s)", [["Lucas là một người hùng tượng trưng cho ánh sáng.", "Lucas is a hero who symbolizes light."], ["Tâm là người ngồi cạnh tôi.", "Tam is the person who sits next to me."], ["Mẹ tôi là người đặt cho tôi cái tên này.", "My mother is the person who gave me this name."]]], ["Nghe có vẻ …", "It sounds + adj · It sounds like + a/an + N", [["Nghe có vẻ là một cái tên rất ý nghĩa.", "It sounds like a really meaningful name."], ["Nghe hay đấy.", "That sounds great."], ["Nghe có vẻ là một ý hay.", "It sounds like a good idea."]]], ["Khi tôi …", "… when + S + V2 · When + S + V2, S + V2", [["Tôi có tên này khi tôi làm việc ở nước ngoài.", "I got this name when I worked overseas."], ["Khi đi du lịch nước ngoài, tôi dùng tên này.", "When I traveled overseas, I used this name."], ["Tôi chọn tên Lucas khi tôi còn là sinh viên.", "I chose the name Lucas when I was a student."]]], ["Rưỡi", "a / an + N + and a half", [["Tôi đã học tiếng Anh được một tháng rưỡi.", "I have learned English for a month and a half."], ["Buổi học kéo dài một tiếng rưỡi.", "The lesson lasts an hour and a half."], ["Cho thêm một muỗng rưỡi đường.", "Add a spoon and a half of sugar."]]], ["Nhờ ai đó làm gì", "Could you + V …?", [["Cô có thể gửi cho em file PDF được không?", "Could you send me the PDF file?"], ["Bạn có thể nói chậm hơn được không?", "Could you speak more slowly?"], ["Bạn có thể gửi cho tôi bài học được không?", "Could you send me the lesson?"]]], ["Để mà …", "S + V + so that + S + can + V", [["Tôi ghi chép để có thể ôn bài.", "I take notes so that I can review the lesson."], ["Cô ấy đi sớm để có thể gặp sếp.", "She leaves early so that she can meet the boss."], ["Hãy nói chậm để tôi có thể hiểu.", "Please speak slowly so that I can understand."]]], ["Tiện cho ai làm gì", "It is (more) convenient for + somebody + to V", [["Như vậy em ôn bài sẽ tiện hơn.", "It is more convenient for me to review the lesson."], ["Tôi đi xe buýt thì tiện.", "It is convenient for me to take the bus."], ["9 giờ bạn đến có tiện không?", "Is it convenient for you to come at nine?"]]], ["Đang đi vào …", "S + am / is / are + walking into + the + N", [["Tôi đang đi vào sảnh chính.", "I am walking into the main lobby."], ["Cô ấy đang đi vào thang máy.", "She is walking into the lift.", ["She is walking into the elevator."]], ["Họ đang đi vào công ty.", "They are walking into the company."]]], ["Người mà … (chủ ngữ dài)", "The one who + V2 … + is …", [["Người ngồi ở bàn đó trước khi Tâm đến là đồng nghiệp của cô ấy.", "The one who sat at that desk before Tam came is her colleague."], ["Người ngồi cạnh tôi là Tâm.", "The one who sits next to me is Tam."], ["Người đặt tên cho tôi là ông tôi.", "The one who gave me this name is my grandfather."]]], ["Chuyển chỗ", "move from A to B · move to + N", [["Tâm chuyển từ tầng hai lên tầng ba.", "Tam moved from the second floor to the third floor."], ["Tại sao Tâm chuyển sang chỗ mới?", "Why did Tam move to a new place?"], ["Cô ấy phải dời đi ba mét.", "She had to move three meters."]]], ["Hỏi khoảng cách & vị trí", "How far is it from A to B? · Where is + N + now?", [["Từ nhà bạn đến công ty bao xa?", "How far is it from your house to the company?"], ["Bây giờ đồng nghiệp của cô ấy ở đâu?", "Where is her colleague now?"], ["Bàn của cô ấy ở cạnh cửa sổ.", "Her desk is next to the window."]]]];
+const KEEP=new Set(["I", "Tam", "Lucas", "PDF", "English"]);
+const Q=[];
+S.forEach((g,gi)=>g[2].forEach(q=>{
+  const m=q[1].match(/^(.*?)([.?!])$/);
+  const body=m?m[1]:q[1], end=m?m[2]:'';
+  const words=body.split(' ');
+  const alts=[body,...(q[2]||[]).map(a=>a.replace(/[.?!]$/,''))].map(a=>a.toLowerCase().split(' ').join(' '));
+  Q.push({g:gi,name:g[0],form:g[1],vi:q[0],full:q[1],words,end,alts});
+}));
+const state=Q.map(()=>({placed:[],status:'',order:null,fixed:0}));
+let cur=0, filterG=-1;
+const $=id=>document.getElementById(id);
+
+function shuffle(n){
+  let a;
+  do{a=[...Array(n).keys()];for(let i=n-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}}
+  while(n>2&&a.every((v,i)=>v===i));
+  return a;
+}
+function disp(q,i){const w=q.words[i];return (i===0&&!KEEP.has(w))?w.charAt(0).toLowerCase()+w.slice(1):w}
+function visible(){return Q.map((q,i)=>i).filter(i=>filterG<0||Q[i].g===filterG)}
+
+function render(){
+  if(TTS&&render._cur!==cur){speechSynthesis.cancel();render._cur=cur}
+  const q=Q[cur], st=state[cur];
+  if(!st.order) st.order=shuffle(q.words.length);
+  $('tag').textContent=(q.g+1)+'. '+q.name;
+  $('form').textContent=q.form;
+  $('num').textContent=(cur+1)+'.';
+  $('vi').textContent=q.vi;
+  const ans=$('answer'), bank=$('bank');
+  ans.className='answer'+(st.status==='ok'||st.status==='shown'?' ok':st.status==='bad'?' bad':'');
+  ans.innerHTML='';
+  if(!st.placed.length) ans.innerHTML='<span class="ph">Bấm vào các từ bên dưới để ghép câu…</span>';
+  st.placed.forEach((wi,pos)=>{
+    const c=document.createElement('button');c.className='chip';c.textContent=disp(q,wi);
+    if(pos<st.fixed) c.classList.add('fixed');
+    if(st.status==='bad'&&st.wrongFrom!=null&&pos>=st.wrongFrom) c.classList.add('wrong');
+    const locked=st.status==='ok'||st.status==='shown';
+    c.onclick=()=>{ if(locked||pos<st.fixed) return; st.placed.splice(pos,1); st.status=''; render(); };
+    ans.appendChild(c);
+  });
+  if(st.placed.length===q.words.length&&q.end){const p=document.createElement('span');p.className='punct';p.textContent=q.end;ans.appendChild(p)}
+  bank.innerHTML='';
+  st.order.forEach(wi=>{
+    const c=document.createElement('button');c.className='chip';c.textContent=disp(q,wi);
+    if(st.placed.includes(wi)) c.classList.add('used');
+    c.onclick=()=>{ if(st.status==='ok'||st.status==='shown') return; st.placed.push(wi); st.status=''; render(); if(st.placed.length===q.words.length) check(); };
+    bank.appendChild(c);
+  });
+  const locked=st.status==='ok'||st.status==='shown';
+  ['check','hint','show'].forEach(id=>$(id).disabled=locked);
+  const msg=$('msg');
+  msg.className='msg'+(st.status?' '+st.status:'');
+  msg.textContent=st.status==='ok'?'✔ Chính xác! '+q.full:st.status==='shown'?'Đáp án: '+q.full:st.status==='bad'?(st.placed.length<q.words.length?'Câu chưa đủ từ, hãy ghép tiếp.':'✘ Chưa đúng, các từ màu đỏ cần sắp xếp lại.'):'';
+  if((st.status==='ok'||st.status==='shown')&&TTS){
+    const w=document.createElement('span');w.className='say';
+    w.innerHTML='<button type="button" title="Nghe lại">🔊 Nghe lại</button><button type="button" title="Đọc chậm">🐢 Chậm</button>';
+    w.children[0].onclick=()=>speak(q.full,1);
+    w.children[1].onclick=()=>speak(q.full,0.65);
+    msg.appendChild(w);
+  }
+  const v=visible(), k=v.indexOf(cur);
+  $('prev').disabled=k<=0; $('next').textContent=k>=v.length-1?'Xem kết quả →':'Câu sau →';
+  dots(); stats();
+}
+function sentence(st,q){return st.placed.map(i=>q.words[i]).join(' ').toLowerCase()}
+const TTS='speechSynthesis' in window;
+let VOICE=null;
+function pickVoice(){
+  if(!TTS) return;
+  const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+  VOICE=vs.find(v=>/en[-_]US/i.test(v.lang)&&/Google|Natural|Microsoft (Aria|Jenny|Guy)|Samantha/i.test(v.name))
+      ||vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/en[-_]GB/i.test(v.lang))||vs[0]||null;
+}
+if(TTS){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function speak(text,rate){
+  if(!TTS) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=VOICE?VOICE.lang:'en-US'; if(VOICE) u.voice=VOICE;
+  u.rate=rate||1;
+  speechSynthesis.speak(u);
+}
+function check(){
+  const q=Q[cur], st=state[cur];
+  if(st.placed.length<q.words.length){st.status='bad';st.wrongFrom=null;render();return}
+  const s=sentence(st,q);
+  if(q.alts.includes(s)){st.status='ok';speak(q.full,1)}
+  else{
+    st.status='bad';
+    const tgt=q.words.map(w=>w.toLowerCase()), got=st.placed.map(i=>q.words[i].toLowerCase());
+    let k=0;while(k<got.length&&got[k]===tgt[k])k++; st.wrongFrom=k;
+  }
+  render();
+}
+function hint(){
+  const q=Q[cur], st=state[cur];
+  const tgt=q.words.map(w=>w.toLowerCase()), got=st.placed.map(i=>q.words[i].toLowerCase());
+  let k=0;while(k<got.length&&got[k]===tgt[k])k++;
+  const keep=st.placed.slice(0,k);
+  const need=tgt[k]; if(need==null) return;
+  const wi=q.words.findIndex((w,i)=>w.toLowerCase()===need&&!keep.includes(i));
+  st.placed=[...keep,wi]; st.fixed=Math.max(st.fixed,k+1); st.status='';
+  render(); if(st.placed.length===q.words.length) check();
+}
+function stats(){
+  const v=visible();
+  const ok=v.filter(i=>state[i].status==='ok').length;
+  $('score').textContent=ok+' / '+v.length+' đúng';
+  const doneN=v.filter(i=>state[i].status==='ok'||state[i].status==='shown').length;
+  $('pbar').style.width=(doneN/v.length*100)+'%';
+}
+function dots(){
+  const d=$('dots');d.innerHTML='';
+  visible().forEach(i=>{
+    const b=document.createElement('button');b.className='dot'+(i===cur?' cur':'')+(state[i].status==='ok'?' ok':state[i].status==='shown'?' shown':'');
+    b.textContent=i+1;b.onclick=()=>{cur=i;showCard();render()};d.appendChild(b);
+  });
+}
+function showCard(){$('card').style.display='';$('done').style.display='none'}
+function finish(){
+  const v=visible(), ok=v.filter(i=>state[i].status==='ok').length, sh=v.filter(i=>state[i].status==='shown').length;
+  $('card').style.display='none';$('done').style.display='block';
+  $('doneText').textContent=`Tự làm đúng ${ok}/${v.length} câu`+(sh?` · xem đáp án ${sh} câu`:'')+`. Câu chưa làm: ${v.length-ok-sh}.`;
+  dots();
+}
+$('check').onclick=check;
+$('hint').onclick=hint;
+$('reset').onclick=()=>{const st=state[cur];st.placed=[];st.fixed=0;st.status='';st.order=shuffle(Q[cur].words.length);render()};
+$('show').onclick=()=>{const q=Q[cur],st=state[cur];st.placed=q.words.map((w,i)=>i);st.fixed=0;st.status='shown';render();speak(q.full,1)};
+$('prev').onclick=()=>{const v=visible(),k=v.indexOf(cur);if(k>0){cur=v[k-1];render()}};
+$('next').onclick=()=>{const v=visible(),k=v.indexOf(cur);if(k<v.length-1){cur=v[k+1];render()}else finish()};
+$('restart').onclick=()=>{visible().forEach(i=>state[i]={placed:[],status:'',order:null,fixed:0});cur=visible()[0];showCard();render()};
+const f=$('filter');
+f.innerHTML='<option value="-1">Tất cả cấu trúc (45 câu)</option>'+S.map((g,i)=>`<option value="${i}">${i+1}. ${g[0]}</option>`).join('');
+f.onchange=()=>{filterG=+f.value;cur=visible()[0];showCard();render()};
+render();
+</script>
+</body>
+</html>
